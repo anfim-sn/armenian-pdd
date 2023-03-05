@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { createTheme } from "@mui/material";
+import { ThemesList } from "./components/ThemesList";
+import { GroupWithQuestons, QuestionType } from "./types/group";
+import { questions } from "./data/questions";
+import { QuestionsList } from "./components/QuestionsList";
+import { groupsByTheme } from "./data/groupsByTheme";
 
 const theme = createTheme({
   palette: {
@@ -22,10 +27,36 @@ const GlobalStyled = createGlobalStyle`
 
   body {
     background: #282c34;
+    color: #fff;
   }
 `;
 
 const App = () => {
+  const [groupQuestions, setGroupQuestions] = useState<QuestionType[]>([]);
+  const [groupsWithQuestions, setGroupsWithQuestions] = useState<
+    GroupWithQuestons[]
+  >([]);
+
+  const handleGroup = (id: number) => {
+    setGroupQuestions(
+      groupsWithQuestions.find((elem) => elem.groupId === id)?.questions ?? []
+    );
+  };
+
+  useEffect(() => {
+    const themes = Object.entries(groupsByTheme);
+    const groupsWithQuestions = themes.map((theme): GroupWithQuestons => {
+      const themeId = parseInt(theme[0]);
+      return {
+        groupId: themeId,
+        groupName: theme[1].title,
+        questions: questions.filter((elem) => elem.group == themeId),
+      };
+    });
+    setGroupsWithQuestions(groupsWithQuestions);
+    setGroupQuestions(groupsWithQuestions[0].questions);
+  }, [questions]);
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyled />
@@ -33,6 +64,8 @@ const App = () => {
         <header className="App-header">
           <h1>Armenian PDD</h1>
         </header>
+        <ThemesList groups={groupsWithQuestions} handleGroup={handleGroup} />
+        <QuestionsList questions={groupQuestions} />
       </div>
     </ThemeProvider>
   );
