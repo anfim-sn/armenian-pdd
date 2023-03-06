@@ -12,12 +12,18 @@ const QuestionsListWrapper = styled.div`
   margin-top: 40px;
 `
 
+const TopButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+
 export const QuestionsList = ({ questions = [] }: QuestionsListProps) => {
   const [index, setIndex] = useState(0)
   const [question, setQuestion] = useState(questions?.[0] ?? {})
 
   useEffect(() => {
     setQuestion(questions?.[0] ?? [0])
+    setIndex(0)
   }, [questions])
 
   const nextQuestion = () => {
@@ -37,7 +43,7 @@ export const QuestionsList = ({ questions = [] }: QuestionsListProps) => {
 
   return (
     <QuestionsListWrapper>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <TopButtonWrapper>
         <Button variant="contained" sx={{ m: 1 }} onClick={e => prevQuestion()}>
           Назад
         </Button>
@@ -45,7 +51,7 @@ export const QuestionsList = ({ questions = [] }: QuestionsListProps) => {
         <Button variant="contained" sx={{ m: 1 }} onClick={e => nextQuestion()}>
           Далее
         </Button>
-      </div>
+      </TopButtonWrapper>
       <Question
         id={question.id}
         question={question.question}

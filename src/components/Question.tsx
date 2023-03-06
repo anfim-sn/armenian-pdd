@@ -3,6 +3,19 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Answer } from './Answer'
 
+const QuestionWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`
+
+const ImageStyled = styled.img`
+  max-width: 500px;
+  height: 300px;
+  margin: 0 auto;
+  object-fit: cover;
+`
+
 const ImagePlaceholder = styled.div`
   width: 500px;
   height: 300px;
@@ -57,12 +70,9 @@ export const Question = ({
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+    <QuestionWrapper>
       {image ? (
-        <img
-          src={'./assets/images/pddticket/small/' + image}
-          style={{ height: '300px', margin: '0 auto' }}
-        />
+        <ImageStyled src={'./assets/images/pddticket/small/' + image} />
       ) : (
         <ImagePlaceholder>Вопрос без изображения</ImagePlaceholder>
       )}
@@ -90,6 +100,6 @@ export const Question = ({
       <Button onClick={handleShowCorrectAnswer} disabled={isAnswered}>
         Показать правильный ответ
       </Button>
-    </div>
+    </QuestionWrapper>
   )
 }
