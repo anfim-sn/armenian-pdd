@@ -42,6 +42,7 @@ export const QuestionsList = ({ questions = [] }: QuestionsListProps) => {
         question={question.question}
         correctAnswerKey={question.correct_answer}
         answers={question.answers || {}}
+        image={question.image}
       />
       <Button onClick={e => prevQuestion()}>Назад</Button>
       <Button onClick={e => nextQuestion()}>Далее</Button>

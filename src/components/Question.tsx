@@ -7,6 +7,7 @@ type QuestionProps = {
   question: string
   correctAnswerKey: string
   answers: Record<string, string>
+  image: string
 }
 
 export const Question = ({
@@ -14,6 +15,7 @@ export const Question = ({
   question,
   correctAnswerKey,
   answers,
+  image,
 }: QuestionProps) => {
   const [isAnswered, setIsAnswered] = useState(false)
   const [answerState, setAnswerState] = useState('')
@@ -45,7 +47,7 @@ export const Question = ({
       <p>
         Вопрос: {question} {answerState}
       </p>
-
+      {image && <img src={'./assets/images/pddticket/small/' + image} />}
       <ul>
         {Object.entries(answers)
           .filter(([_, answerText]) => answerText !== '')
