@@ -1,9 +1,33 @@
+import styled from 'styled-components'
+
 type ThemeProps = {
   children: React.ReactNode
-  id: number
+  groupId: number
   handleTheme: Function
+  isSelected: boolean
 }
 
-export const Theme = ({ children, id, handleTheme }: ThemeProps) => {
-  return <li onClick={e => handleTheme(id)}>{children}</li>
+const ThemeStyled = styled.li<{ isSelected: boolean }>`
+  list-style: none;
+  font-size: 17px;
+  cursor: pointer;
+
+  &:hover {
+    color: #a0a0a0;
+  }
+
+  ${({ isSelected }) => isSelected && { textDecoration: 'underline' }}
+`
+
+export const Theme = ({
+  children,
+  groupId,
+  handleTheme,
+  isSelected,
+}: ThemeProps) => {
+  return (
+    <ThemeStyled isSelected={isSelected} onClick={e => handleTheme(groupId)}>
+      {children}
+    </ThemeStyled>
+  )
 }

@@ -1,3 +1,4 @@
+import { Button } from '@mui/material'
 import React, { MouseEventHandler } from 'react'
 import styled from 'styled-components'
 
@@ -8,13 +9,14 @@ type AnswerProps = {
   onClick?: MouseEventHandler
 }
 
-const AnswerStyled = styled.li<{
+const AnswerStyled = styled.div<{
   isCorrect: boolean
   showAnswer: boolean
 }>`
   color: ${({ isCorrect, showAnswer }) =>
     (showAnswer && isCorrect && 'green') ||
-    (showAnswer && !isCorrect && 'red')};
+    (showAnswer && !isCorrect && 'red') ||
+    'white'};
 `
 
 export const Answer = ({
@@ -24,12 +26,10 @@ export const Answer = ({
   onClick,
 }: AnswerProps) => {
   return (
-    <AnswerStyled
-      onClick={onClick}
-      isCorrect={isCorrect}
-      showAnswer={showAnswer}
-    >
-      {text}
-    </AnswerStyled>
+    <Button variant="outlined" sx={{ width: '100%', mt: 2 }} onClick={onClick}>
+      <AnswerStyled isCorrect={isCorrect} showAnswer={showAnswer}>
+        {text}
+      </AnswerStyled>
+    </Button>
   )
 }

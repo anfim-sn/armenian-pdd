@@ -1,6 +1,20 @@
-import { Button } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
 import { Answer } from './Answer'
+
+const ImagePlaceholder = styled.div`
+  width: 500px;
+  height: 300px;
+  border: 2px solid #606060;
+  color: #606060;
+  font-size: 25px;
+  margin: 0 auto;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
 
 type QuestionProps = {
   id: number
@@ -43,11 +57,18 @@ export const Question = ({
   }
 
   return (
-    <div>
-      <p>
-        Вопрос: {question} {answerState}
-      </p>
-      {image && <img src={'./assets/images/pddticket/small/' + image} />}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      {image ? (
+        <img
+          src={'./assets/images/pddticket/small/' + image}
+          style={{ height: '300px', margin: '0 auto' }}
+        />
+      ) : (
+        <ImagePlaceholder>Вопрос без изображения</ImagePlaceholder>
+      )}
+      <Typography variant="h5">
+        {question} {answerState && (answerState === 'Правильно' ? '✅' : '❌')}
+      </Typography>
       <ul>
         {Object.entries(answers)
           .filter(([_, answerText]) => answerText !== '')
@@ -66,9 +87,9 @@ export const Question = ({
             )
           })}
       </ul>
-      {!isAnswered && (
-        <Button onClick={handleShowCorrectAnswer}>Показать правильный</Button>
-      )}
+      <Button onClick={handleShowCorrectAnswer} disabled={isAnswered}>
+        Показать правильный ответ
+      </Button>
     </div>
   )
 }

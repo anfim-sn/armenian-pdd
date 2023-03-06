@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './App.css'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
-import { createTheme } from '@mui/material'
+import { createTheme, Grid } from '@mui/material'
 import { ThemesList } from './components/ThemesList'
 import { GroupWithQuestons, Questions } from './types/group'
 import { questions } from './data/questions'
@@ -56,13 +56,15 @@ const groupsWithQuestions = themes.map((theme): GroupWithQuestons => {
 })
 
 const App = () => {
+  const [selectedGroupId, setSelectedGroupId] = useState(
+    groupsWithQuestions?.[0].groupId
+  )
   const [groupQuestions, setGroupQuestions] = useState(
     groupsWithQuestions?.[0].questions ?? {}
   )
 
   const handleGroup = (id: number) => {
-    console.log(id)
-
+    setSelectedGroupId(id)
     setGroupQuestions(
       groupsWithQuestions.find(elem => elem.groupId === id)?.questions ?? []
     )
@@ -75,8 +77,18 @@ const App = () => {
         <header className="App-header">
           <h1>Armenian PDD</h1>
         </header>
-        <ThemesList groups={groupsWithQuestions} handleGroup={handleGroup} />
-        <QuestionsList questions={groupQuestions} />
+        <Grid container>
+          <Grid xs={4}>
+            <ThemesList
+              groups={groupsWithQuestions}
+              handleGroup={handleGroup}
+              selectedGroupId={selectedGroupId}
+            />
+          </Grid>
+          <Grid xs={8}>
+            <QuestionsList questions={groupQuestions} />
+          </Grid>
+        </Grid>
       </div>
     </ThemeProvider>
   )

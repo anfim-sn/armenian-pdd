@@ -1,4 +1,4 @@
-import { Button } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Questions } from '../types/group'
@@ -37,6 +37,15 @@ export const QuestionsList = ({ questions = [] }: QuestionsListProps) => {
 
   return (
     <QuestionsListWrapper>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Button variant="contained" sx={{ m: 1 }} onClick={e => prevQuestion()}>
+          Назад
+        </Button>
+        <Typography variant="h6">Вопрос №{index + 1}</Typography>
+        <Button variant="contained" sx={{ m: 1 }} onClick={e => nextQuestion()}>
+          Далее
+        </Button>
+      </div>
       <Question
         id={question.id}
         question={question.question}
@@ -44,8 +53,6 @@ export const QuestionsList = ({ questions = [] }: QuestionsListProps) => {
         answers={question.answers || {}}
         image={question.image}
       />
-      <Button onClick={e => prevQuestion()}>Назад</Button>
-      <Button onClick={e => nextQuestion()}>Далее</Button>
     </QuestionsListWrapper>
   )
 }
