@@ -1,4 +1,4 @@
-export type QuestionType = {
+export type Question = {
   id: number,
   alias: string | null,
   position: number,
@@ -18,6 +18,7 @@ export type QuestionType = {
   updated_at: string | null,
   hint_for_correct_answer: string,
   question: string,
+  answers?: Record<string, string>
   answer_a: string,
   answer_b: string,
   answer_c: string,
@@ -25,8 +26,10 @@ export type QuestionType = {
   answer_e: string,
 }
 
+export type Questions = Question[];
+
 export type GroupWithQuestons = {
   groupId: number
   groupName: string
-  questions: QuestionType[]
+  questions: Question[]
 }

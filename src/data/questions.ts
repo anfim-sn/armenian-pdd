@@ -1,6 +1,6 @@
-import { QuestionType } from '../types/group';
+import { Questions } from '../types/group';
 
-export const questions: QuestionType[] = [
+export const questions: Questions = [
   {
     id: 747,
     alias: 'ticket747',

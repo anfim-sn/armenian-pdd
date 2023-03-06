@@ -1,11 +1,11 @@
-import { groupsByTheme } from "../data/groupsByTheme";
-import { GroupWithQuestons } from "../types/group";
-import { Theme } from "./Theme";
+import { groupsByTheme } from '../data/groupsByTheme'
+import { GroupWithQuestons } from '../types/group'
+import { Theme } from './Theme'
 
 type ThemeListProps = {
-  groups: GroupWithQuestons[];
-  handleGroup: Function;
-};
+  groups: GroupWithQuestons[]
+  handleGroup: Function
+}
 
 export const ThemesList = ({ groups, handleGroup }: ThemeListProps) => {
   return (
@@ -16,5 +16,5 @@ export const ThemesList = ({ groups, handleGroup }: ThemeListProps) => {
         </Theme>
       ))}
     </ul>
-  );
-};
+  )
+}

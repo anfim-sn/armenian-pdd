@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import "./App.css";
-import { createGlobalStyle, ThemeProvider } from "styled-components";
-import { createTheme } from "@mui/material";
-import { ThemesList } from "./components/ThemesList";
-import { GroupWithQuestons, QuestionType } from "./types/group";
-import { questions } from "./data/questions";
-import { QuestionsList } from "./components/QuestionsList";
-import { groupsByTheme } from "./data/groupsByTheme";
+import React, { useEffect, useState } from 'react'
+import './App.css'
+import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import { createTheme } from '@mui/material'
+import { ThemesList } from './components/ThemesList'
+import { GroupWithQuestons, Questions } from './types/group'
+import { questions } from './data/questions'
+import { QuestionsList } from './components/QuestionsList'
+import { groupsByTheme } from './data/groupsByTheme'
 
 const theme = createTheme({
   palette: {
-    mode: "dark",
+    mode: 'dark',
   },
-});
+})
 
 const GlobalStyled = createGlobalStyle`
   * {
@@ -27,35 +27,46 @@ const GlobalStyled = createGlobalStyle`
 
   body {
     background: #282c34;
-    color: #fff;
+    color: #fff; 
   }
-`;
+`
+
+const themes = Object.entries(groupsByTheme)
+const normalizedQuestions = questions.map(elem => {
+  const questionEntry = Object.entries(elem)
+  return {
+    ...elem,
+    answers: questionEntry.reduce((acc, cur) => {
+      const result = {}
+      if (cur[0].startsWith('answer_')) {
+        Object.assign(acc, { [cur[0]]: cur[1] })
+      }
+      return acc
+    }, {}),
+  }
+})
+
+const groupsWithQuestions = themes.map((theme): GroupWithQuestons => {
+  const themeId = parseInt(theme[0])
+  return {
+    groupId: themeId,
+    groupName: theme[1].title,
+    questions: normalizedQuestions.filter(elem => elem.group == themeId),
+  }
+})
 
 const App = () => {
-  const [groupQuestions, setGroupQuestions] = useState<QuestionType[]>([]);
-  const [groupsWithQuestions, setGroupsWithQuestions] = useState<
-    GroupWithQuestons[]
-  >([]);
+  const [groupQuestions, setGroupQuestions] = useState(
+    groupsWithQuestions?.[0].questions ?? {}
+  )
 
   const handleGroup = (id: number) => {
-    setGroupQuestions(
-      groupsWithQuestions.find((elem) => elem.groupId === id)?.questions ?? []
-    );
-  };
+    console.log(id)
 
-  useEffect(() => {
-    const themes = Object.entries(groupsByTheme);
-    const groupsWithQuestions = themes.map((theme): GroupWithQuestons => {
-      const themeId = parseInt(theme[0]);
-      return {
-        groupId: themeId,
-        groupName: theme[1].title,
-        questions: questions.filter((elem) => elem.group == themeId),
-      };
-    });
-    setGroupsWithQuestions(groupsWithQuestions);
-    setGroupQuestions(groupsWithQuestions[0].questions);
-  }, [questions]);
+    setGroupQuestions(
+      groupsWithQuestions.find(elem => elem.groupId === id)?.questions ?? []
+    )
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -68,7 +79,7 @@ const App = () => {
         <QuestionsList questions={groupQuestions} />
       </div>
     </ThemeProvider>
-  );
-};
+  )
+}
 
-export default App;
+export default App
