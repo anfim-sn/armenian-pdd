@@ -9,14 +9,15 @@ type ThemeProps = {
 
 const ThemeStyled = styled.li<{ isSelected: boolean }>`
   list-style: none;
-  font-size: 17px;
+  font-size: 19px;
   cursor: pointer;
 
   &:hover {
     color: #a0a0a0;
   }
 
-  ${({ isSelected }) => isSelected && { textDecoration: 'underline' }}
+  ${({ isSelected }) =>
+    isSelected && { textDecoration: 'underline', color: '#7ec1ff' }}
 `
 
 export const Theme = ({

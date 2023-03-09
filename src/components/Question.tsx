@@ -1,4 +1,4 @@
-import { Button, Typography } from '@mui/material'
+import { Button, ButtonGroup, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useQuestionStatisticService } from '../contexts/ServiceContext'
@@ -39,6 +39,7 @@ type QuestionProps = {
   correctAnswerKey: string
   answers: Record<string, string>
   image: string
+  nextQuestionHandle: () => void
 }
 
 export const Question = ({
@@ -47,6 +48,7 @@ export const Question = ({
   correctAnswerKey,
   answers,
   image,
+  nextQuestionHandle,
 }: QuestionProps) => {
   const questionStatisticService = useQuestionStatisticService()
   const [answerResult, setAnswerResult] = useState('')
@@ -63,8 +65,6 @@ export const Question = ({
   }, [questionId])
 
   useEffect(() => {
-    console.log('selectedAnswerKey')
-
     setQuestionStatistic(questionStatisticService.getByQuestionId(questionId))
   }, [selectedAnswerKey])
 
@@ -117,9 +117,20 @@ export const Question = ({
             )
           })}
       </ul>
-      <Button onClick={handleShowCorrectAnswer} disabled={isAnswered}>
-        Показать правильный ответ
-      </Button>
+      {!isAnswered ? (
+        <ButtonGroup>
+          <Button sx={{ width: '50%' }} onClick={handleShowCorrectAnswer}>
+            Показать правильный ответ
+          </Button>
+          <Button sx={{ width: '50%' }} onClick={nextQuestionHandle}>
+            Пропустить
+          </Button>
+        </ButtonGroup>
+      ) : (
+        <Button variant="contained" sx={{ mt: 1 }} onClick={nextQuestionHandle}>
+          Далее
+        </Button>
+      )}
     </QuestionWrapper>
   )
 }

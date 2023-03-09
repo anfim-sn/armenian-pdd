@@ -9,7 +9,8 @@ type QuestionsListProps = {
 }
 
 const QuestionsListWrapper = styled.div`
-  margin-top: 40px;
+  width: 80%;
+  margin: 40px auto;
 `
 
 const TopButtonWrapper = styled.div`
@@ -26,14 +27,14 @@ export const QuestionsList = ({ questions = [] }: QuestionsListProps) => {
     setIndex(0)
   }, [questions])
 
-  const nextQuestion = () => {
+  const nextQuestionHandle = () => {
     let i = index + 1
     if (questions[i] !== undefined) {
       setQuestion(questions[i])
       setIndex(i)
     }
   }
-  const prevQuestion = () => {
+  const prevQuestionHandle = () => {
     let i = index - 1
     if (questions[i] !== undefined) {
       setQuestion(questions[i])
@@ -44,13 +45,14 @@ export const QuestionsList = ({ questions = [] }: QuestionsListProps) => {
   return (
     <QuestionsListWrapper>
       <TopButtonWrapper>
-        <Button variant="contained" sx={{ m: 1 }} onClick={e => prevQuestion()}>
+        <Button
+          variant="contained"
+          sx={{ m: 1 }}
+          onClick={e => prevQuestionHandle()}
+        >
           Назад
         </Button>
         <Typography variant="h6">Вопрос №{index + 1}</Typography>
-        <Button variant="contained" sx={{ m: 1 }} onClick={e => nextQuestion()}>
-          Далее
-        </Button>
       </TopButtonWrapper>
       <Question
         questionId={question.id}
@@ -58,6 +60,7 @@ export const QuestionsList = ({ questions = [] }: QuestionsListProps) => {
         correctAnswerKey={question.correct_answer}
         answers={question.answers || {}}
         image={question.image}
+        nextQuestionHandle={nextQuestionHandle}
       />
     </QuestionsListWrapper>
   )

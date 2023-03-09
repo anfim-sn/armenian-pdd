@@ -1,5 +1,3 @@
-import { log } from 'console';
-
 export type QuestionStatistic = {
   'correct': number
   'incorrect': number
@@ -32,7 +30,6 @@ export class QuestionsStatisticService {
   }
 
   private static getLocalStorage() {
-    console.log('getLocalStorage');
     if (window?.localStorage && typeof window.localStorage === 'object') {
       return localStorage
     }
