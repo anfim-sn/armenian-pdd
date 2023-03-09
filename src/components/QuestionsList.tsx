@@ -53,7 +53,7 @@ export const QuestionsList = ({ questions = [] }: QuestionsListProps) => {
         </Button>
       </TopButtonWrapper>
       <Question
-        id={question.id}
+        questionId={question.id}
         question={question.question}
         correctAnswerKey={question.correct_answer}
         answers={question.answers || {}}

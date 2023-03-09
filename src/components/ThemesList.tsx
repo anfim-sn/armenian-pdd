@@ -1,6 +1,5 @@
 import { Typography } from '@mui/material'
 import styled from 'styled-components'
-import { groupsByTheme } from '../data/groupsByTheme'
 import { GroupWithQuestons } from '../types/group'
 import { Theme } from './Theme'
 

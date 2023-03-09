@@ -7,6 +7,8 @@ import { GroupWithQuestons, Questions } from './types/group'
 import { questions } from './data/questions'
 import { QuestionsList } from './components/QuestionsList'
 import { groupsByTheme } from './data/groupsByTheme'
+import { QuestionsStatisticService } from './services/QuestionsStatisticService'
+import { ServicesProvider } from './contexts/ServiceContext'
 
 const theme = createTheme({
   palette: {
@@ -71,26 +73,30 @@ const App = () => {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyled />
-      <div className="App">
-        <header className="App-header">
-          <h1>Armenian PDD</h1>
-        </header>
-        <Grid container>
-          <Grid xs={4}>
-            <ThemesList
-              groups={groupsWithQuestions}
-              handleGroup={handleGroup}
-              selectedGroupId={selectedGroupId}
-            />
+    <ServicesProvider
+      value={{ questionStatisticService: QuestionsStatisticService }}
+    >
+      <ThemeProvider theme={theme}>
+        <GlobalStyled />
+        <div className="App">
+          <header className="App-header">
+            <h1>Armenian PDD</h1>
+          </header>
+          <Grid container>
+            <Grid xs={4}>
+              <ThemesList
+                groups={groupsWithQuestions}
+                handleGroup={handleGroup}
+                selectedGroupId={selectedGroupId}
+              />
+            </Grid>
+            <Grid xs={8}>
+              <QuestionsList questions={groupQuestions} />
+            </Grid>
           </Grid>
-          <Grid xs={8}>
-            <QuestionsList questions={groupQuestions} />
-          </Grid>
-        </Grid>
-      </div>
-    </ThemeProvider>
+        </div>
+      </ThemeProvider>
+    </ServicesProvider>
   )
 }
 

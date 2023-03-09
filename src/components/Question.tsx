@@ -1,8 +1,11 @@
 import { Button, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { useQuestionStatisticService } from '../contexts/ServiceContext'
+import { QuestionStatistic } from '../services/QuestionsStatisticService'
 import { Answer } from './Answer'
 
+//#region Styles
 const QuestionWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -28,9 +31,10 @@ const ImagePlaceholder = styled.div`
   align-items: center;
   justify-content: center;
 `
+//#endregion
 
 type QuestionProps = {
-  id: number
+  questionId: number
   question: string
   correctAnswerKey: string
   answers: Record<string, string>
@@ -38,46 +42,62 @@ type QuestionProps = {
 }
 
 export const Question = ({
-  id,
+  questionId,
   question,
   correctAnswerKey,
   answers,
   image,
 }: QuestionProps) => {
-  const [isAnswered, setIsAnswered] = useState(false)
-  const [answerState, setAnswerState] = useState('')
+  const questionStatisticService = useQuestionStatisticService()
+  const [answerResult, setAnswerResult] = useState('')
   const [selectedAnswerKey, setSelectedAnswerKey] = useState('')
+  const [questionStatistic, setQuestionStatistic] = useState<QuestionStatistic>(
+    questionStatisticService.getByQuestionId(questionId)
+  )
+  const isAnswered = answerResult !== ''
 
   useEffect(() => {
-    setIsAnswered(false)
-    setAnswerState('')
+    setAnswerResult('')
     setSelectedAnswerKey('')
-  }, [id])
+    setQuestionStatistic(questionStatisticService.getByQuestionId(questionId))
+  }, [questionId])
+
+  useEffect(() => {
+    console.log('selectedAnswerKey')
+
+    setQuestionStatistic(questionStatisticService.getByQuestionId(questionId))
+  }, [selectedAnswerKey])
 
   const handleAnswer = (answerKey: string) => () => {
     setSelectedAnswerKey(answerKey)
-    setIsAnswered(true)
 
     if (answerKey === correctAnswerKey) {
-      setAnswerState('Правильно')
+      setAnswerResult('Правильно')
+      questionStatisticService.setQuestionStatistic(questionId, true)
     } else {
-      setAnswerState('Неверно')
+      setAnswerResult('Неверно')
+      questionStatisticService.setQuestionStatistic(questionId, false)
     }
   }
 
   const handleShowCorrectAnswer = () => {
-    setIsAnswered(true)
+    setAnswerResult('Неверно')
   }
 
   return (
     <QuestionWrapper>
+      <p>
+        Статистика ответов: <span>{questionStatistic.correct}✅ </span>
+        <span>{questionStatistic.incorrect}❌</span>
+      </p>
       {image ? (
         <ImageStyled src={'./assets/images/pddticket/small/' + image} />
       ) : (
         <ImagePlaceholder>Вопрос без изображения</ImagePlaceholder>
       )}
       <Typography variant="h5">
-        {question} {answerState && (answerState === 'Правильно' ? '✅' : '❌')}
+        {question}{' '}
+        {answerResult && (answerResult === 'Правильно' ? '✅' : '❌')}
       </Typography>
       <ul>
         {Object.entries(answers)
